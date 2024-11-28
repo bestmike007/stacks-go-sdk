@@ -62,7 +62,7 @@ func makeRequest(url string, method string, payload interface{}) ([]byte, error)
 	return resp.Body(), nil
 }
 
-func getNextNonce(address string, network stacks.StacksNetwork) (*big.Int, error) {
+func GetNextNonce(address string, network stacks.StacksNetwork) (*big.Int, error) {
 	url := network.GetNonceAPIURL(address)
 
 	body, err := makeRequest(url, "GET", nil)
@@ -163,7 +163,7 @@ func createAndSignTransaction(tx StacksTransaction, network stacks.StacksNetwork
 	}
 
 	if nonce == nil {
-		nonce, err = getNextNonce(senderAddress, network)
+		nonce, err = GetNextNonce(senderAddress, network)
 		if err != nil {
 			return &CustomError{Message: "Failed to fetch nonce", Err: err}
 		}

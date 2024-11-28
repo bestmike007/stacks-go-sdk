@@ -21,9 +21,9 @@ import (
 func Test_stacks_blockchain_api_client_AccountsAPIService(t *testing.T) {
 
 	configuration := stacks_blockchain_api_client.NewConfiguration()
-	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[1]}
+	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[0]}
 	apiClient := stacks_blockchain_api_client.NewAPIClient(configuration)
-	testAddress := "ST15C893XJFJ6FSKM020P9JQDB5T7X6MQTXMBPAVH"
+	testAddress := "SP2TA4FGB43WVAS8MVS6YCWTSN2BZNQ1ASGEAKSDD"
 	principal := stacks_blockchain_api_client.GetFilteredEventsAddressParameter{
 		String: &testAddress,
 	}

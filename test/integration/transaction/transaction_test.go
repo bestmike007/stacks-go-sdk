@@ -28,7 +28,11 @@ func TestBroadcastSTXTokenTransferTransaction(t *testing.T) {
 	amount := big.NewInt(1000000) // 1 STX
 	memo := "Test transfer"
 	network := stacks.NewStacksTestnet()
-	tx, err := transaction.MakeSTXTokenTransfer(recipient, *amount, memo, *network, senderAddress, privateKey, nil, nil)
+	nonce, err := transaction.GetNextNonce(senderAddress, *network)
+	require.NoError(t, err, "Failed to get nonce")
+	// skip 4 nonce to ensure it never get settled
+	nonce = nonce.Add(nonce, big.NewInt(4))
+	tx, err := transaction.MakeSTXTokenTransfer(recipient, *amount, memo, *network, senderAddress, privateKey, nil, nonce)
 	if err != nil {
 		t.Fatalf("Failed to create transaction: %v", err)
 	}
@@ -70,7 +74,11 @@ func TestBroadcastContractCallTransaction(t *testing.T) {
 	}
 
 	network := stacks.NewStacksTestnet()
-	tx, err := transaction.MakeContractCall(contractAddress, contractName, functionName, functionArgs, *network, senderAddress, privateKey, nil, nil, stacks.PostConditionModeAllow, []transaction.PostCondition{})
+	nonce, err := transaction.GetNextNonce(senderAddress, *network)
+	require.NoError(t, err, "Failed to get nonce")
+	// skip 5 nonce to ensure it never get settled
+	nonce = nonce.Add(nonce, big.NewInt(5))
+	tx, err := transaction.MakeContractCall(contractAddress, contractName, functionName, functionArgs, *network, senderAddress, privateKey, nil, nonce, stacks.PostConditionModeAllow, []transaction.PostCondition{})
 	if err != nil {
 		t.Fatalf("Failed to create transaction: %v", err)
 	}
@@ -118,8 +126,13 @@ func TestBroadcastContractDeployTransaction(t *testing.T) {
     (ok (var-get counter)))`
 
 	network := stacks.NewStacksTestnet()
+	nonce, err := transaction.GetNextNonce(senderAddress, *network)
+	require.NoError(t, err, "Failed to get nonce")
+	// skip 6 nonce to ensure it never get settled
+	nonce = nonce.Add(nonce, big.NewInt(6))
 	tx, err := transaction.MakeContractDeploy(
-		contractName,
+		// make sure the contract name is unique
+		contractName+"-"+nonce.Text(36),
 		codeBody,
 		stacks.ClarityVersionUnspecified,
 		*network,

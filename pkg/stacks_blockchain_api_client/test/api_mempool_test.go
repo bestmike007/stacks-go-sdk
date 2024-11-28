@@ -21,7 +21,7 @@ import (
 func Test_stacks_blockchain_api_client_MempoolAPIService(t *testing.T) {
 
 	configuration := stacks_blockchain_api_client.NewConfiguration()
-	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[1]}
+	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[0]}
 	apiClient := stacks_blockchain_api_client.NewAPIClient(configuration)
 
 	t.Run("Test MempoolAPIService GetMempoolFeePriorities", func(t *testing.T) {

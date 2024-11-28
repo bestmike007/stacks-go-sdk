@@ -21,7 +21,7 @@ import (
 func Test_stacks_blockchain_api_client_BlocksAPIService(t *testing.T) {
 
 	configuration := stacks_blockchain_api_client.NewConfiguration()
-	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[1]}
+	configuration.Servers = stacks_blockchain_api_client.ServerConfigurations{configuration.Servers[0]}
 	apiClient := stacks_blockchain_api_client.NewAPIClient(configuration)
 	height := uint64(1234)
 	heightOrHash := stacks_blockchain_api_client.GetBlockHeightOrHashParameter{
